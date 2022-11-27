@@ -57,10 +57,10 @@ routes.forEach((route) => {
 			defaultLayout,
       helpers: {
         scripts() {
-          return route.clientIndex ? `<script type="text/javascript" src=${route.moduleName}-${route.clientIndex.replace('jsx', 'js')}></script>` : '';
+          return route.clientIndex ? `<script type="text/javascript" src=/${route.moduleName}-${route.clientIndex.replace('jsx', 'js')}></script>` : '';
         },
         styles() {
-          return route.stylesIndex ? `<script type="text/javascript" src=${route.moduleName}-${route.stylesIndex.replace('less', 'js')}></script>` : '';
+          return route.stylesIndex ? `<script type="text/javascript" src=/${route.moduleName}-${route.stylesIndex.replace('less', 'js')}></script>` : '';
         },
         title() {
           return route.title || config.appTitle;

@@ -1,9 +1,9 @@
 # compare-state-handling
 
 ## build and start
-Before first start and whenever a route has been added or changed, run
-```$ node build```
-To start server, run
+Before first start and whenever a route has been added or changed, run  
+```$ node build```  
+To start server, run  
 ```$ npm start```
 
 ---
