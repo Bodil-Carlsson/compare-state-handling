@@ -1,13 +1,23 @@
 const http = require('http');
 const { Server } = require("socket.io");
+const { generateNumbers } = require('../utils/random-numbers');
 
 function createSocket(app) {
 	const server = http.createServer(app);
 	const io = new Server(server, { serveClient: false });
 
 	io.on('connection', (socket) => {
+		let numbers;
 		const interval = setInterval(() => {
-			socket.emit('exampleEvent');
+			if (!numbers) {
+				numbers = generateNumbers();
+				socket.emit('numbers:start');
+			}
+			socket.emit('numbers:number', { number: numbers.shift() });
+			if (!numbers.length) {
+				clearInterval(interval);
+				socket.emit('numbers:done');
+			}
 		}, 3000);
 
 		socket.on('disconnect', () => {

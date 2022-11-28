@@ -9,6 +9,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackConfig = require('../webpack.config.js');
 
 const { setUpApi } = require('./api');
+const { createSocket } = require('./socket');
 const { routes } = require('../generated/server-routes');
 const config = require('../config');
 const extname = 'hbs';
@@ -74,6 +75,7 @@ routes.forEach((route) => {
 	});
 });
 
-app.listen(config.port, () => {
+const server = createSocket(app);
+server.listen(config.port, function () {
   console.log(`Example app listening on port ${config.port}!`);
 });

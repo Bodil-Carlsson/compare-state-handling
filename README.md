@@ -15,4 +15,4 @@ To start server, run
 * redux
 * jotai
 * zustand
-### compare differnt ways to handle React state
+### compare different ways to handle React state
