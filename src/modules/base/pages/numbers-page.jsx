@@ -14,23 +14,58 @@ const showLastNumber = (numbers) => {
 };
 
 export const NumbersPage = () => {
+	const [rowsFetched, setRowsFetched] = useState(false);
+	const [rows, setRows] = useState([]);
 	const [numbers, setNumbers] = useState([]);
+	const [correctNumber, setCorrectNumber] = useState();
+
 	useEffect(() => {
-		const socket = socketclient.io();
-		socket.on('numbers:done', () => {
-			socket.disconnect();
-			setNumbers((numbers) => showLastNumber([...numbers]));
-		});
-		socket.on('numbers:number', (msg) => {
-			setNumbers((numbers) => [...showLastNumber([...numbers]), { value: msg.number, status: correctNumberStatus.hide }]);
-		});
-		return () => socket.disconnect();
+		(async () => {
+			const res = await fetch('http://localhost:3000/api/user/rows', { method: 'GET' });
+			const { rows } = await res.json();
+			setRows(rows);
+			setRowsFetched(true);
+		})();
 	}, []);
+
+	useEffect(() => {
+		if (rowsFetched) {
+			const socket = socketclient.io();
+			socket.on('numbers:done', () => {
+				socket.disconnect();
+				setNumbers((numbers) => showLastNumber([...numbers]));
+			});
+			socket.on('numbers:number', ({ number }) => {
+				setNumbers((numbers) => [...showLastNumber([...numbers]), { value: number, status: correctNumberStatus.hide }]);
+
+			});
+			return () => socket.disconnect();
+		}
+	}, [rowsFetched]);
+
+	useEffect(() => {
+		const lastShown = [...numbers].reverse().find(({ status }) => status === correctNumberStatus.show);
+		if (lastShown) {
+			setCorrectNumber(lastShown.value);
+		}
+	}, [numbers]);
+
+	useEffect(() => {
+		if (correctNumber) {
+			setRows((rows) => rows.map((row) => ({
+				...row,
+				numbers: row.numbers
+					.map((num) => ({ value: num.value, isCorrect: num.isCorrect || num.value === correctNumber }))
+					.sort((a, b) => b.isCorrect - a.isCorrect)
+			})));
+		}
+	}, [correctNumber])
+
 	return (
 		<div className="content-width">
 			<CorrectNumbers numbers={numbers.filter(({ status }) => status === correctNumberStatus.show)}/>
 			<div className="flex space-between">
-				<UserRows />
+				<UserRows rows={rows}/>
 				<HiddenNumbers numbers={numbers.filter(({ status }) => status === correctNumberStatus.hide)}/>
 			</div>
 		</div>

@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { UserRow } from './user-row/user-row';
 
-export const UserRows = () => {
-	const [rows, setRows] = useState([]);
-	useEffect(() => {
-		(async () => {
-			const res = await fetch('http://localhost:3000/api/user/rows', { method: 'GET' });
-			const { rows } = await res.json();
-			setRows(rows);
-		})();
-	}, []);
+const corrCount = (row) => row.numbers.filter((n) => n.isCorrect).length;
+
+export const UserRows = ({ rows }) => {
+	const sortedRows = [...rows].sort((a, b) => corrCount(b) - corrCount(a));
 	return (
 		<ul className='user-rows'>
-			{rows.map((row) => (
+			{sortedRows.map((row) => (
 				<UserRow key={row.id} row={row} />
 			))}
 	</ul>
