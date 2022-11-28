@@ -8,6 +8,7 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackConfig = require('../webpack.config.js');
 
+const { setUpApi } = require('./api');
 const { routes } = require('../generated/server-routes');
 const config = require('../config');
 const extname = 'hbs';
@@ -25,6 +26,8 @@ app.use(
     publicPath: webpackConfig.output.publicPath,
   })
 );
+
+setUpApi(app);
 
 app.get('/', (req, res, next) => {
   app.set('views', layoutsDir);
