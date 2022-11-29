@@ -1,60 +1,11 @@
 @import (reference) '../../../../../../components/number/style.less';
-
-@numberSizeXXS: 16px;
-@numberSizeXS: 18px;
-@numberSizeS: 20px;
-@numberSizeM: 22px;
-@numberSizeL: 24px;
-@numberSizeXL: 26px;
+@import (reference) '../../../../../../components/common-style/colors.less';
 
 .user-number {
 	.number();
+	background-color: @gray;
 	&.correct {
-		background-color: green;
-		color: white;
-		font-weight: bold;
-	}
-
-	@media @xxs {
-		width: @numberSizeXXS;
-		height: @numberSizeXXS;
-		line-height: @numberSizeXXS;
-		font-size: 10px;
-	}
-
-	@media @xs {
-		width: @numberSizeXS;
-		height: @numberSizeXS;
-		line-height: @numberSizeXS;
-		font-size: 10px;
-	}
-
-	@media @s {
-		width: @numberSizeS;
-		height: @numberSizeS;
-		line-height: @numberSizeS;
-		font-size: 12px;
-	}
-
-	@media @m {
-		width: @numberSizeM;
-		height: @numberSizeM;
-		line-height: @numberSizeM;
-		font-size: 12px;
-	}
-
-	@media @l {
-		width: @numberSizeL;
-		height: @numberSizeL;
-		line-height: @numberSizeL;
-		font-size: 12px;
-	}
-
-	@media @xl {
-		width: @numberSizeXL;
-		height: @numberSizeXL;
-		line-height: @numberSizeXL;
-		font-size: 15px;
-		margin: @margin-l;
+		background-color: @correct;
+		font-weight: 600;
 	}
 }

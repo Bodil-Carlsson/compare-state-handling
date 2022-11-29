@@ -2,10 +2,27 @@
 @import (reference) '../../../../../components/common-style/style.less';
 
 .user-row {
-	.margin();
-	border: 1px solid black;
+	display: grid;
+	grid-template-columns: repeat(11, 1fr);
+
+	box-shadow:
+	.1em .1em .3em .3em white,
+	.1em .1em .1em .4em #383838;
+
+	margin: 1.2em 0;
+	&:first-child {
+		margin-top: 0;
+	}
+
+	&:last-child {
+		margin-bottom: 0;
+	}
 }
 
 .user-row-numbers {
-	.inline-block();
+	grid-column: 1 / 11;
+	
+	display: grid;
+	grid-template-columns: repeat(10, 1fr);
+	gap: 6px;
 }

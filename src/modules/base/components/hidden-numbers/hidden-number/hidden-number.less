@@ -1,58 +1,7 @@
+@import (reference) '../../../../../components/common-style/colors.less';
 @import (reference) '../../../../../components/number/style.less';
 
 .hidden-number {
 	.number();
-	width: 15px;
-	height: 15px;
-	line-height: 15px;
-	font-size: 10px;
-}
-
-@numberSizeXXS: 12px;
-@numberSizeXS: 14px;
-@numberSizeS: 16px;
-@numberSizeM: 16px;
-@numberSizeL: 16px;
-@numberSizeXL: 16px;
-
-.hidden-number {
-	.number();
-	font-size: 10px;
-	@media @xxs {
-		width: @numberSizeXXS;
-		height: @numberSizeXXS;
-		line-height: @numberSizeXXS;
-	}
-
-	@media @xs {
-		width: @numberSizeXS;
-		height: @numberSizeXS;
-		line-height: @numberSizeXS;
-	}
-
-	@media @s {
-		width: @numberSizeS;
-		height: @numberSizeS;
-		line-height: @numberSizeS;
-	}
-
-	@media @m {
-		width: @numberSizeM;
-		height: @numberSizeM;
-		line-height: @numberSizeM;
-	}
-
-	@media @l {
-		width: @numberSizeL;
-		height: @numberSizeL;
-		line-height: @numberSizeL;
-		margin: @margin-m;
-	}
-
-	@media @xl {
-		width: @numberSizeXL;
-		height: @numberSizeXL;
-		line-height: @numberSizeXL;
-		margin: @margin-m;
-	}
+	background-color: @correct;
 }

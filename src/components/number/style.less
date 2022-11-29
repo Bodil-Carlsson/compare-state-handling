@@ -1,11 +1,28 @@
-@import '../common-style/variables.less';
-@import '../common-style/style.less';
+@import '../common-style/colors.less';
 
 .number {
-	.margin();
-	.inline-block();
-	text-align: center;
-	border: 1px solid black;
+	display: grid;
+	place-content: center;
+
+	height: 0;
+	padding-top: 50%;
+	padding-bottom: 50%;
+
 	border-radius: 50%;
-	background-color: lightgray;
+	box-shadow: .1em .1em .2em 0 #383838;
+
+	font-size: .6em;
+
+	@media (min-width: 400px) {
+		font-size: .8em;
+	}
+
+	@media (min-width: 700px) {
+		font-size: 1em;
+	}
+
+	@media (min-width: 1024px) {
+		font-size: 1.2em;
+	}
+
 }

@@ -1,55 +1,8 @@
-@import (reference) '../../../../../components/common-style/variables.less';
+@import (reference) '../../../../../components/common-style/colors.less';
 @import (reference) '../../../../../components/number/style.less';
-
-@numberSizeXXS: 20px;
-@numberSizeXS: 22px;
-@numberSizeS: 24px;
-@numberSizeM: 26px;
-@numberSizeL: 28px;
-@numberSizeXL: 30px;
 
 .correct-number {
 	.number();
-	@media @xxs {
-		width: @numberSizeXXS;
-		height: @numberSizeXXS;
-		line-height: @numberSizeXXS;
-		font-size: 12px;
-	}
-
-	@media @xs {
-		width: @numberSizeXS;
-		height: @numberSizeXS;
-		line-height: @numberSizeXS;
-		font-size: 12px;
-	}
-
-	@media @s {
-		width: @numberSizeS;
-		height: @numberSizeS;
-		line-height: @numberSizeS;
-		font-size: 12px;
-	}
-
-	@media @m {
-		width: @numberSizeM;
-		height: @numberSizeM;
-		line-height: @numberSizeM;
-		font-size: 14px;
-	}
-
-	@media @l {
-		width: @numberSizeL;
-		height: @numberSizeL;
-		line-height: @numberSizeL;
-		font-size: 14px;
-	}
-
-	@media @xl {
-		width: @numberSizeXL;
-		height: @numberSizeXL;
-		line-height: @numberSizeXL;
-		font-size: 16px;
-		margin: @margin-l;
-	}
+	background-color: @correct;
+	font-weight: 600;
 }

@@ -1,3 +1,4 @@
+import './numbers-page.less';
 import React, { useState, useEffect } from "react";
 import socketclient from "socket.io-client";
 import { CorrectNumbers } from "../components/correct-numbers/correct-numbers";
@@ -62,10 +63,14 @@ export const NumbersPage = () => {
 	}, [correctNumber])
 
 	return (
-		<div className="content-width">
-			<CorrectNumbers numbers={numbers.filter(({ status }) => status === correctNumberStatus.show)}/>
-			<div className="flex space-between">
+		<div className="numbers-page">
+			<div className="correct-numbers-wrapper">
+				<CorrectNumbers numbers={numbers.filter(({ status }) => status === correctNumberStatus.show)}/>
+			</div>
+			<div className="user-rows-wrapper">
 				<UserRows rows={rows}/>
+			</div>
+			<div className="hidden-numbers-wrapper">
 				<HiddenNumbers numbers={numbers.filter(({ status }) => status === correctNumberStatus.hide)}/>
 			</div>
 		</div>
