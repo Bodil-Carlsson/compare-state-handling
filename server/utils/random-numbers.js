@@ -10,7 +10,7 @@ function getRandomIndex(max) {
 	return Math.floor(Math.random() * max);
 }
 
-function generateNumbers({ min = 1, max = 50, count = 10 } = {}) {
+function generateNumbers({ min = 1, max = 30, count = 10 } = {}) {
 	const allNumbers = getAllNumbers({ min, max });
 	const numbers = [];
 	for (let i = 0; i < count; i++) {

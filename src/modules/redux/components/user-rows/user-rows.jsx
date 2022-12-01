@@ -1,14 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { UserRow } from './user-row/user-row';
+import { sortRows } from './animations';
+import { rowsSorted } from '../../store/slices/user-rows/actions';
 
-const corrCount = (row) => row.numbers.filter((n) => n.isCorrect).length;
-
-export const UserRows = ({ rows }) => {
-	const sortedRows = [...rows].sort((a, b) => corrCount(b) - corrCount(a));
+export const UserRows = () => {
+	const rowIds = useSelector((state) => state.userRows.rowIds);
+	const isSorting = useSelector((state) => state.userRows.isSorting);
+	const dispatch = useDispatch();
+	const ref = useRef();
+	useLayoutEffect(() => {
+		if (isSorting) {
+			sortRows({
+				el: ref.current,
+				onComplete: () => dispatch((rowsSorted()))
+			})
+		}
+	}, [isSorting, dispatch])
 	return (
-		<ul className='user-rows'>
-			{sortedRows.map((row) => (
-				<UserRow key={row.id} row={row} />
+		<ul ref={ref} className='user-rows'>
+			{rowIds.map((id) => (
+				<UserRow key={id} id={id} />
 			))}
 	</ul>
 	);

@@ -18,7 +18,7 @@ function createSocket(app) {
 				clearInterval(interval);
 				socket.emit('numbers:done');
 			}
-		}, 3000);
+		}, 5000);
 
 		socket.on('disconnect', () => {
 			clearInterval(interval);

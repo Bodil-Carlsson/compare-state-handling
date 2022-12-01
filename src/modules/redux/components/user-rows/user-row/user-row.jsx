@@ -1,17 +1,34 @@
 import './user-row.less';
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { UserNumber } from './user-number/user-number';
 import { CorrectCount } from './correct-count/correct-count';
+import { useSelector } from 'react-redux';
+import { userNumberStatus } from '../../../constants';
+import { sortRow } from './animations';
+import { useDispatch } from 'react-redux';
+import { rowSorted } from '../../../store/slices/user-rows/actions';
 
-export const UserRow = ({ row }) => {
+export const UserRow = ({ id }) => {
+	const numbers = useSelector((state) => state.userRows.rows.find((r) => r.id === id).numbers);
+	const isSorting = useSelector((state) => state.userRows.rows.find((r) => r.id === id).isSorting);
+	const ref = useRef();
+	const dispatch = useDispatch();
+	useLayoutEffect(() => {
+		if (isSorting) {
+			sortRow({
+				el: ref.current,
+				onComplete: () => dispatch(rowSorted(id))
+			});
+		}
+	}, [isSorting, id, dispatch]);
 	return (
 		<li className='user-row'>
-			<ul className='user-row-numbers'>
-				{row.numbers.map(({ value, isCorrect }) => (
-					<UserNumber key={value} value={value} isCorrect={isCorrect}/>
+			<ul ref={ref} className='user-row-numbers'>
+				{numbers.map(({ value, status }) => (
+					<UserNumber key={value} rowId={id} value={value} status={status}/>
 				))}
 			</ul>
-			<CorrectCount correctCount={row.numbers.filter(({ isCorrect }) => isCorrect).length}/>
+			<CorrectCount correctCount={numbers.filter(({ status }) => status > userNumberStatus.correcting).length}/>
 		</li>
 	);
 };
