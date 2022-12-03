@@ -30,7 +30,6 @@ const reducer = (state = initialState, action) => {
 					isCorrecting: false,
 					numbers: row.numbers.map((number) => ({ 
 						...number,
-						value: number.value + 10,
 						status: userNumberStatus.none
 					}))
 				}))
