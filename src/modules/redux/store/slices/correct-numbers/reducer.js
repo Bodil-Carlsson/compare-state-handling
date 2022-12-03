@@ -38,8 +38,9 @@ const reducer = (state = initialState, action) => {
 
 		case startCorrectNumber: {
 			const numbers = [...state.numbers];
-			numbers[action.numberIndex] = {
-				...numbers[action.numberIndex],
+			const numberIndex = numbers.findIndex((n) => n.value === action.number);
+			numbers[numberIndex] = {
+				...numbers[numberIndex],
 				status: correctNumberStatus.correcting
 			};
 			return {

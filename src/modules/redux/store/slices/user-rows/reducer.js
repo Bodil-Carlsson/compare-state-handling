@@ -30,6 +30,7 @@ const reducer = (state = initialState, action) => {
 					isCorrecting: false,
 					numbers: row.numbers.map((number) => ({ 
 						...number,
+						value: number.value + 10,
 						status: userNumberStatus.none
 					}))
 				}))
@@ -45,8 +46,8 @@ const reducer = (state = initialState, action) => {
 
 		case correctNumberInRow: {
 			const rows = [...state.rows];
-			const row = rows[action.rowIndex];
-			rows[action.rowIndex] = { 
+			const row = rows[action.rowId];
+			rows[action.rowId] = { 
 				...row,
 				isCorrecting: true,
 				numbers: row.numbers.map((n) => {
@@ -64,9 +65,8 @@ const reducer = (state = initialState, action) => {
 
 		case sortRow: {
 			const rows = [...state.rows];
-			const rowIndex = rows.findIndex((r) => r.id === action.rowId);
-			const row = rows[rowIndex];
-			rows[rowIndex] = { 
+			const row = rows[action.rowId];
+			rows[action.rowId] = { 
 				...row,
 				isSorting: true,
 				isCorrecting: false,
@@ -85,9 +85,8 @@ const reducer = (state = initialState, action) => {
 
 		case rowSorted: {
 			const rows = [...state.rows];
-			const rowIndex = rows.findIndex((r) => r.id === action.rowId);
-			const row = rows[rowIndex];
-			rows[rowIndex] = { 
+			const row = rows[action.rowId];
+			rows[action.rowId] = { 
 				...row,
 				isSorting: false,
 				numbers: row.numbers.map((n) => {

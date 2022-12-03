@@ -3,7 +3,6 @@ import React from "react";
 import { CorrectNumbers } from "../components/correct-numbers/correct-numbers";
 import { HiddenNumbers } from "../components/hidden-numbers/hidden-numbers";
 import { UserRows } from "../components/user-rows/user-rows";
-import { Correction } from '../components/correction'; 
 
 export const NumbersPage = () => (
 	<div className="numbers-page">
@@ -16,6 +15,5 @@ export const NumbersPage = () => (
 		<div className="hidden-numbers-wrapper">
 			<HiddenNumbers />
 		</div>
-		<Correction />
 	</div>
 );

@@ -3,7 +3,6 @@ import React from "react";
 import { CorrectNumber } from "./correct-number/correct-number";
 import { useSelector } from 'react-redux';
 import { correctNumberStatus } from '../../constants';
-import { useShowNextNumber } from '../../hooks/use-show-next-number'; 
 
 export const CorrectNumbers = () => {
 	const numbers = useSelector(
