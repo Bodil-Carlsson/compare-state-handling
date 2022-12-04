@@ -8,28 +8,38 @@ import { startCorrection } from '../../store/slices/correct-numbers/actions';
 
 export const UserRows = () => {
 	const rowIds = useSelector((state) => state.userRows.rowIds);
+	const rowIdsRef = useRef(rowIds);
 	const isSorting = useSelector((state) => state.userRows.isSorting);
 	const dispatch = useDispatch();
 	const ref = useRef();
 
 	useEffect(() => {
-		(async () => {
-			await dispatch(fetchUserRows());
-			showRows({
-				el: ref.current,
+		if (!rowIds.length) {
+			(async () => {
+				await dispatch(fetchUserRows());
+				showRows({
+					el: ref.current,
 				onComplete: () => dispatch(startCorrection())
-			});
-		})();
-	}, [dispatch]);
+				});
+			})();
+		} else if (!rowIdsRef.current.length) {
+			rowIdsRef.current = rowIds;
+		}
+	}, [rowIds, dispatch]);
 
 	useLayoutEffect(() => {
 		if (isSorting) {
 			sortRows({
 				el: ref.current,
-				onComplete: () => dispatch((rowsSorted()))
+				prevOrder: rowIdsRef.current,
+				currOrder: rowIds,
+				onComplete: () => {
+					dispatch(rowsSorted());
+				}
 			})
+			rowIdsRef.current = rowIds;
 		}
-	}, [isSorting, dispatch]);
+	}, [isSorting, rowIds, dispatch]);
 
 	return (
 		<ul ref={ref} className='user-rows'>

@@ -51,7 +51,7 @@ const reducer = (state = initialState, action) => {
 				isCorrecting: true,
 				numbers: row.numbers.map((n) => {
 					if (n.value === state.numberToCorrect) {
-						return { value: n.value, status: userNumberStatus.correcting }
+						return { ...n, status: userNumberStatus.correcting }
 					}
 					return n;
 				})
@@ -70,8 +70,8 @@ const reducer = (state = initialState, action) => {
 				isSorting: true,
 				isCorrecting: false,
 				numbers: row.numbers.map((n) => {
-					if (n.status === userNumberStatus.correcting) {
-						return { value: n.value, status: userNumberStatus.sorting }
+					if (n.value === state.numberToCorrect) {
+						return { ...n, status: userNumberStatus.sorting };
 					}
 					return n;
 				}).sort((a, b) => b.status - a.status)
@@ -89,8 +89,8 @@ const reducer = (state = initialState, action) => {
 				...row,
 				isSorting: false,
 				numbers: row.numbers.map((n) => {
-					if (n.status === userNumberStatus.sorting) {
-						return { value: n.value, status: userNumberStatus.corrected }
+					if (n.value === state.numberToCorrect) {
+						return { ...n, status: userNumberStatus.corrected };
 					}
 					return n;
 				})
