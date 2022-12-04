@@ -10,6 +10,7 @@ import { rowSorted } from '../../../store/slices/user-rows/actions';
 
 export const UserRow = ({ id }) => {
 	const numbers = useSelector((state) => state.userRows.rows.find((r) => r.id === id).numbers);
+	const numbersRef = useRef(numbers);
 	const isSorting = useSelector((state) => state.userRows.rows.find((r) => r.id === id).isSorting);
 	const ref = useRef();
 	const dispatch = useDispatch();
@@ -17,10 +18,13 @@ export const UserRow = ({ id }) => {
 		if (isSorting) {
 			sortRow({
 				el: ref.current,
+				prevOrder: numbersRef.current, 
+				currOrder: numbers,
 				onComplete: () => dispatch(rowSorted(id))
 			});
 		}
-	}, [isSorting, id, dispatch]);
+		numbersRef.current = numbers;
+	}, [isSorting, numbers, id, dispatch]);
 	return (
 		<li className='user-row'>
 			<ul ref={ref} className='user-row-numbers'>
