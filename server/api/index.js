@@ -8,7 +8,9 @@ function setUpApi(app) {
 				numbers: generateNumbers().map((value) => ({ value }))
 			}));
 
-		res.send({ rows });
+			setTimeout(() => {
+				res.send({ rows });
+			}, 2500);
 	});
 }
 
