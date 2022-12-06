@@ -1,7 +1,6 @@
 import socketclient from "socket.io-client";
 import { startCorrection } from '../slices/correct-numbers/action-types';
-
-import { addCorrectNumber } from '../slices/correct-numbers/actions';
+import { correctNumberReceived } from '../slices/correct-numbers/actions';
 
 let socket;
 
@@ -11,7 +10,7 @@ export default (store) => (next) => (action) => {
       socket = socketclient.io();
       socket.on('numbers:done', () => socket.disconnect());
       socket.on('numbers:number', ({ number }) => {
-        store.dispatch(addCorrectNumber(number));
+        store.dispatch(correctNumberReceived(number));
       });
     }
   }

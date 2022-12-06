@@ -1,19 +1,20 @@
 import actionTypes from "./action-types";
 
 export const addUserRows = (rows) => ({ type: actionTypes.addUserRows, rows });
-export const setNumberToCorrect = (number) => ({ type: actionTypes.setNumberToCorrect, number });
-export const correctNumberInRow = (rowId) => ({ type: actionTypes.correctNumberInRow, rowId });
-export const sortRow = (rowId) => ({ type: actionTypes.sortRow, rowId });
-export const rowSorted = (rowId) => ({ type: actionTypes.rowSorted, rowId });
-export const sortRows = () => ({ type: actionTypes.sortRows });
-export const rowsSorted = () => ({ type: actionTypes.rowsSorted });
+export const correctUserNumber = (rowId, number) => ({ type: actionTypes.correctUserNumber, rowId, number });
+export const userNumberCorrected = (rowId, number) => ({ type: actionTypes.userNumberCorrected, rowId, number });
+export const sortUserRow = (rowId) => ({ type: actionTypes.sortUserRow, rowId });
+export const userRowSorted = (rowId) => ({ type: actionTypes.userRowSorted, rowId });
+export const sortUserRows = () => ({ type: actionTypes.sortUserRows });
+export const userRowsSorted = () => ({ type: actionTypes.userRowsSorted });
+
 
 export default {
 	addUserRows,
-	setNumberToCorrect,
-	correctNumberInRow,
-	sortRow,
-	rowSorted,
-	sortRows,
-	rowsSorted
+	correctUserNumber,
+	userNumberCorrected,
+	sortUserRow,
+	userRowSorted,
+	sortUserRows,
+	userRowsSorted
 };

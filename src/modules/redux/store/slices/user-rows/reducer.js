@@ -1,14 +1,15 @@
 import {
 	addUserRows,
-	setNumberToCorrect,
-	correctNumberInRow,
-	sortRow,
-	rowSorted,
-	sortRows,
-	rowsSorted
+	correctUserNumber,
+	userNumberCorrected,
+	sortUserRow,
+	userRowSorted,
+	sortUserRows,
+	userRowsSorted
 } from './action-types';
+import { startCorrectingNumber } from '../correct-numbers/action-types';
 import { userNumberStatus } from '../../../constants';
-
+import { sortNumbers, sortRowIds, numbersNeedsSorting } from './utils';
 const initialState = {
 	rowIds: [],
 	rows: [],
@@ -16,7 +17,18 @@ const initialState = {
 	isSorting: false
 };
 
-const getRowCorrectCount = (rowId, rows) => rows.find((r) => r.id === rowId).numbers.filter((n) => n.status === userNumberStatus.corrected).length;
+const updateNumberStatus = (rows, rowId, numberToCorrect, status) => {
+	return rows.map((row) => row.id === rowId ? 
+		({
+			...row, 
+			numbers: row.numbers.map((number) => number.value === numberToCorrect ? 
+				({ ...number, status }) : 
+				number
+			) 
+		}) : 
+		row
+	)
+};
 
 const reducer = (state = initialState, action) => {
 	switch(action.type) {
@@ -24,96 +36,80 @@ const reducer = (state = initialState, action) => {
 			return { 
 				...state,
 				rowIds: action.rows.map((row) => row.id),
+				sortedIds: action.rows.map((row) => row.id),
 				rows: action.rows.map((row) => ({ 
 					...row,
 					isSorting: false,
 					isCorrecting: false,
 					numbers: row.numbers.map((number) => ({ 
 						...number,
-						status: userNumberStatus.none
+						status: userNumberStatus.initial
 					}))
 				}))
 			};
 		}
 
-		case setNumberToCorrect: {
+		case startCorrectingNumber: {
 			return {
 				...state,
 				numberToCorrect: action.number
 			};
 		}
 
-		case correctNumberInRow: {
-			const rows = [...state.rows];
-			const row = rows[action.rowId];
-			rows[action.rowId] = { 
-				...row,
-				isCorrecting: true,
-				numbers: row.numbers.map((n) => {
-					if (n.value === state.numberToCorrect) {
-						return { ...n, status: userNumberStatus.correcting }
-					}
-					return n;
-				})
-			};
+		case correctUserNumber: {
 			return {
 				...state,
-				rows
+				rows: updateNumberStatus(state.rows, action.rowId, action.number, userNumberStatus.correcting)
 			};
 		}
 
-		case sortRow: {
-			const rows = [...state.rows];
-			const row = rows[action.rowId];
-			rows[action.rowId] = { 
-				...row,
+		case userNumberCorrected: {
+			return {
+				...state,
+				rows: updateNumberStatus(state.rows, action.rowId, action.number, userNumberStatus.corrected)
+			};
+		}
+
+		case sortUserRow: {
+			return {
+				...state,
+				rows: state.rows.map((row) => row.id === action.rowId ? 
+					({
+						...row,
+						isSorting: true
+					}) : 
+					row
+				)
+			};
+		}
+
+		case userRowSorted: {
+			return {
+				...state,
+				rows: state.rows.map((row) => row.id === action.rowId ? 
+					({
+						...row,
+						isSorting: false,
+						numbers: sortNumbers(row.numbers)
+					}) : 
+					row
+				)
+			};
+		}
+
+		case sortUserRows: {
+			return {
+				...state,
 				isSorting: true,
-				isCorrecting: false,
-				numbers: row.numbers.map((n) => {
-					if (n.value === state.numberToCorrect) {
-						return { ...n, status: userNumberStatus.sorting };
-					}
-					return n;
-				}).sort((a, b) => b.status - a.status)
-			};
-			return {
-				...state,
-				rows
+				sortedIds: sortRowIds(state.rowIds, state.rows)
 			};
 		}
 
-		case rowSorted: {
-			const rows = [...state.rows];
-			const row = rows[action.rowId];
-			rows[action.rowId] = { 
-				...row,
-				isSorting: false,
-				numbers: row.numbers.map((n) => {
-					if (n.value === state.numberToCorrect) {
-						return { ...n, status: userNumberStatus.corrected };
-					}
-					return n;
-				})
-			};
-			return {
-				...state,
-				rows
-			};
-		}
-
-		case sortRows: {
-			const rowIds = [...state.rowIds].sort((a, b) => getRowCorrectCount(b, state.rows) - getRowCorrectCount(a, state.rows));
-			return {
-				...state,
-				rowIds,
-				isSorting: true
-			};
-		}
-
-		case rowsSorted: {
+		case userRowsSorted: {
 			return{
 				...state,
-				isSorting: false
+				isSorting: false,
+				rowIds: [...state.sortedIds]
 			};
 		}
 

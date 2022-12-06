@@ -1,64 +1,65 @@
-
 import { correctNumberStatus } from '../../../constants';
 import {
-	addCorrectNumber,
-	hideCorrectNumber,
-	startCorrectNumber,
-	showCorrectNumber
+	startCorrection,
+	correctNumberReceived,
+	correctNumberWaiting,
+	showCorrectNumber,
+	startCorrectingNumber,
+	correctNumberCorrected
 } from './action-types';
 
 const initialState = {
+	correctionStarted: false,
 	numbers: []
 };
 
+const updateNumberStatus = (numbers, number, status) => numbers.map((n) => n.value === number ? ({ ...n, status }) : n);
+
 const reducer = (state = initialState, action) => {
 	switch(action.type) {
-		case addCorrectNumber: {
-			return {
-				...state,
+
+		case startCorrection: {
+			return { 
+				...state, 
+				correctionStarted: true 
+			};
+		}
+
+		case correctNumberReceived: {
+			return { 
+				...state, 
 				numbers: [
 					...state.numbers, 
-					{ value: action.number, status: correctNumberStatus.none }
-				]
+					{ value: action.number, status: correctNumberStatus.received }
+				] 
 			};
 		}
 
-		case hideCorrectNumber: {
-			const numbers = [...state.numbers];
-			const numberIndex = numbers.findIndex((n) => n.value === action.number);
-			numbers[numberIndex] = {
-				...numbers[numberIndex],
-				status: correctNumberStatus.hide
-			};
+		case correctNumberWaiting: {
 			return {
 				...state,
-				numbers
-			};
-		}
-
-		case startCorrectNumber: {
-			const numbers = [...state.numbers];
-			const numberIndex = numbers.findIndex((n) => n.value === action.number);
-			numbers[numberIndex] = {
-				...numbers[numberIndex],
-				status: correctNumberStatus.correcting
-			};
-			return {
-				...state,
-				numbers
+				numbers: updateNumberStatus(state.numbers, action.number, correctNumberStatus.waiting)
 			};
 		}
 
 		case showCorrectNumber: {
-			const numbers = [...state.numbers];
-			const numberIndex = numbers.findIndex((n) => n.value === action.number);
-			numbers[numberIndex] = {
-				...numbers[numberIndex],
-				status: correctNumberStatus.show
-			};
 			return {
 				...state,
-				numbers
+				numbers: updateNumberStatus(state.numbers, action.number, correctNumberStatus.animating)
+			};
+		}
+
+		case startCorrectingNumber: {
+			return {
+				...state,
+				numbers: updateNumberStatus(state.numbers, action.number, correctNumberStatus.correcting)
+			};
+		}
+
+		case correctNumberCorrected: {
+			return {
+				...state,
+				numbers: updateNumberStatus(state.numbers, action.number, correctNumberStatus.corrected)
 			};
 		}
 

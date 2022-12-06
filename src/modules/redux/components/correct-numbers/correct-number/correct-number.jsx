@@ -1,19 +1,23 @@
 import "./correct-number.less";
-import React, { useLayoutEffect, useRef } from "react";
-import { show } from './animations';
+import React, { useLayoutEffect, useRef, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { correctNumberStatus } from "../../../constants";
-import { useDispatch } from "react-redux";
-import { setNumberToCorrect } from "../../../store/slices/user-rows/actions";
+import { show } from './animations';
+import { startCorrectingNumber } from "../../../store/slices/correct-numbers/actions";
+import { createSelectCorrectNumberStatus } from "../../../store/slices/correct-numbers/selectors";
 
-export const CorrectNumber = ({ value, status }) => {
-	const ref = useRef();
+export const CorrectNumber = ({ value }) => {
+	const selectCorrectNumberStatus = useMemo(createSelectCorrectNumberStatus, []);
+	const status = useSelector((state) => selectCorrectNumberStatus(state, value));
 	const dispatch = useDispatch();
+	const ref = useRef();
+
 	useLayoutEffect(() => {
-		if (status === correctNumberStatus.correcting) {
+		if (status === correctNumberStatus.animating) {
 			show({
 				el: ref.current,
 				number: value,
-				onComplete: () => dispatch(setNumberToCorrect(value))
+				onComplete: () => dispatch(startCorrectingNumber(value))
 			})
 		}
 	}, [status, value, dispatch]);

@@ -7,17 +7,38 @@ export const routePaths = {
 	numbers: '/redux/numbers'
 };
 
+const initial = 'initial';
+const received = 'received';
+const waiting = 'waiting';
+const animating = 'animating';
+const correcting = 'correcting';
+const corrected = 'corrected';
+
+const cns = [
+	received,
+	waiting,
+	animating,
+	correcting,
+	corrected
+];
+
 export const correctNumberStatus = {
-	none: 0,
-	hide: 1,
-	correcting: 2,
-	show: 3
+	received: cns.indexOf(received),
+	waiting: cns.indexOf(waiting),
+	animating: cns.indexOf(animating),
+	correcting: cns.indexOf(correcting),
+	corrected: cns.indexOf(corrected)
 };
 
+const uns = [
+	initial,
+	correcting,
+	corrected
+];
+
 export const userNumberStatus = {
-	none: 0,
-	correcting: 1,
-	sorting: 2,
-	corrected: 3
+	initial: uns.indexOf(initial),
+	correcting: uns.indexOf(correcting),
+	corrected: uns.indexOf(corrected)
 };
 

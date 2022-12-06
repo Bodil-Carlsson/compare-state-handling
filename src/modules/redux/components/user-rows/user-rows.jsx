@@ -1,51 +1,45 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserRow } from './user-row/user-row';
 import { showRows, sortRows } from './animations';
-import { rowsSorted } from '../../store/slices/user-rows/actions';
-import { fetchUserRows } from '../../store/thunks/fetch-user-rows';
-import { startCorrection } from '../../store/slices/correct-numbers/actions';
+import { UserRow } from './user-row/user-row';
+import { selectRowIds, selectIsSorting, selectSortedIds } from '../../store/slices/user-rows/selectors';
+import { sortRowIds } from '../../store/slices/user-rows/utils';
+import { userRowsSorted } from '../../store/slices/user-rows/actions';
 
 export const UserRows = () => {
-	const rowIds = useSelector((state) => state.userRows.rowIds);
-	const rowIdsRef = useRef(rowIds);
-	const isSorting = useSelector((state) => state.userRows.isSorting);
+	const rowIds = useSelector(selectRowIds);
+	const sortedIds = useSelector(selectSortedIds);
+	const isSorting = useSelector(selectIsSorting);
 	const dispatch = useDispatch();
 	const ref = useRef();
 
-	useEffect(() => {
-		if (!rowIds.length) {
-			(async () => {
-				await dispatch(fetchUserRows());
-				showRows({
-					el: ref.current,
-				onComplete: () => dispatch(startCorrection())
-				});
-			})();
-		} else if (!rowIdsRef.current.length) {
-			rowIdsRef.current = rowIds;
-		}
-	}, [rowIds, dispatch]);
+	useLayoutEffect(() => {
+		const tl = showRows({ 
+			el: ref.current, 
+			onComplete: () => tl.revert() 
+		});
+	}, []);
 
 	useLayoutEffect(() => {
+		let tl;
 		if (isSorting) {
-			sortRows({
+			tl = sortRows({
 				el: ref.current,
-				prevOrder: rowIdsRef.current,
 				currOrder: rowIds,
+				sortedOrder: sortedIds,
 				onComplete: () => {
-					dispatch(rowsSorted());
+					dispatch(userRowsSorted());
 				}
-			})
-			rowIdsRef.current = rowIds;
+			});
 		}
-	}, [isSorting, rowIds, dispatch]);
+		return () => tl?.revert?.();
+	}, [isSorting, rowIds, sortedIds, dispatch]);
 
 	return (
 		<ul ref={ref} className='user-rows'>
 			{rowIds.map((id) => (
 				<UserRow key={id} id={id} />
 			))}
-	</ul>
+		</ul>
 	);
 };

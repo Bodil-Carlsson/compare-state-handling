@@ -1,31 +1,32 @@
 import './hidden-number.less';
-import React, { useLayoutEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useLayoutEffect, useRef, useMemo } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { correctNumberStatus } from '../../../constants';
-import { hideCorrectNumber } from '../../../store/slices/correct-numbers/actions';
 import { show, hide } from './animations';
-import { useDispatch } from 'react-redux';
+import { correctNumberWaiting } from '../../../store/slices/correct-numbers/actions';
+import { createSelectCorrectNumberStatus } from '../../../store/slices/correct-numbers/selectors'; 
 
 export const HiddenNumber = ({ value }) =>  {
-	const status = useSelector((state) => state.correctNumbers.numbers.find((n) => n.value === value).status);
-	const ref = useRef();
+	const selectCorrectNumberStatus = useMemo(createSelectCorrectNumberStatus, []);
+	const status = useSelector((state) => selectCorrectNumberStatus(state, value));
 	const dispatch = useDispatch();
+	const ref = useRef();
+
 	useLayoutEffect(() => {
-		if (status === correctNumberStatus.none) {
+		if (status === correctNumberStatus.received) {
 			show({
 				el: ref.current,
-				onComplete: () => dispatch(hideCorrectNumber(value))
+				onComplete: () => dispatch(correctNumberWaiting(value))
 			});
 		}
-		if (status === correctNumberStatus.correcting) {
+		if (status === correctNumberStatus.animating) {
 			hide({
 				el: ref.current
 			});
 		}
 	}, [status, value, dispatch]);
+
 	return (
-		<li ref={ref} className='hidden-number'>
-			
-		</li>
+		<li ref={ref} className='hidden-number'></li>
 	);
 };

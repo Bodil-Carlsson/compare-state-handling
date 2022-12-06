@@ -1,13 +1,15 @@
 export const startCorrection = 'startCorrection';
-export const addCorrectNumber = 'addCorrectNumber';
-export const hideCorrectNumber = 'hideCorrectNumber';
-export const startCorrectNumber = 'startCorrectNumber';
+export const correctNumberReceived = 'correctNumberReceived';
+export const correctNumberWaiting = 'correctNumberWaiting';
 export const showCorrectNumber = 'showCorrectNumber';
+export const startCorrectingNumber = 'startCorrectingNumber';
+export const correctNumberCorrected = 'correctNumberCorrected';
 
 export default {
 	startCorrection,
-	addCorrectNumber,
-	hideCorrectNumber,
-	startCorrectNumber,
-	showCorrectNumber
+	correctNumberReceived,
+	correctNumberWaiting,
+	showCorrectNumber,
+	startCorrectingNumber,
+	correctNumberCorrected
 };
