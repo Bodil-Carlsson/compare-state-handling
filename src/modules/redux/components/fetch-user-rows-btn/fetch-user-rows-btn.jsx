@@ -5,7 +5,7 @@ import { fetchUserRows } from "../../store/thunks/fetch-user-rows";
 
 export const FetchUserRowsBtn = () => {
 	const dispatch = useDispatch();
-	console.log('render FetchUserRowsBtn');
+
 	return (
 		<Button
 			className='fetch-user-rows-btn' 
