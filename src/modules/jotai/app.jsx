@@ -5,10 +5,17 @@ import { routePaths } from "./constants";
 import { NumbersPage } from "./pages/numbers-page";
 import { StartPage } from "./pages/start-page";
 import { Provider } from 'jotai';
+import { useAtomsDebugValue } from 'jotai/devtools'
+
+const DebugAtoms = () => {
+  useAtomsDebugValue();
+  return null;
+}
 
 ReactDOM.render(
 	<React.StrictMode>
 		<Provider>
+			<DebugAtoms />
 			<BrowserRouter>
 				<Routes>
 					<Route 

@@ -1,14 +1,26 @@
 import "./correct-number.less";
-import React from "react";
-import { useAtom } from 'jotai';
+import React, { useLayoutEffect, useRef } from "react";
+import { useUpdateAtom } from 'jotai/utils';
+import { correctNumberStatus } from "../../../constants";
+import { show } from "./animations";
+import { correctNumberWaitingAtom, correctNumberCorrectingAtom } from '../../../atoms/correct-numbers';
 
-export const CorrectNumber = ({ correctNumberAtom }) => {
-	// const [{ value, status }] = useAtom(correctNumberAtom);
-	const value = 1;
-	console.log(correctNumberAtom);
-	console.log(value, status);
+export const CorrectNumber = ({ value, status }) => {
+	const ref = useRef();
+	const updateToCorrecting = useUpdateAtom(correctNumberCorrectingAtom);
+
+	useLayoutEffect(() => {
+		if (status === correctNumberStatus.animating) {
+			show({
+				el: ref.current,
+				number: value,
+				onComplete: () => updateToCorrecting(value)
+			})
+		}
+	}, [status, value, updateToCorrecting]);
+
 	return (
-		<li className="correct-number">
+		<li ref={ref} className="correct-number">
 			{value}
 		</li>
 	);

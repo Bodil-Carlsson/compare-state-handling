@@ -1,13 +1,11 @@
 import React, { useRef, useLayoutEffect } from 'react';
 import { useAtom } from 'jotai';
 import { UserRow } from './user-row/user-row';
-import { rowsAtom } from '../../atoms/atoms';
+import { asyncRowsAtom } from '../../atoms/user-rows';
 import { showRows } from './animations';
 
-const corrCount = (row) => row.numbers.filter((n) => n.isCorrect).length;
-
 export const UserRows = () => {
-	const [rows] = useAtom(rowsAtom);
+	const [rows] = useAtom(asyncRowsAtom);
 	const ref = useRef();
 
 	useLayoutEffect(() => {

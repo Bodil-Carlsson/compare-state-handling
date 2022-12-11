@@ -2,15 +2,14 @@ import './correct-numbers.less';
 import React from "react";
 import { useAtom } from 'jotai';
 import { CorrectNumber } from "./correct-number/correct-number";
-import { correctNumbersAtom } from '../../atoms/atoms';
+import { correctedNumbersAtom } from '../../atoms/correct-numbers';
 
 export const CorrectNumbers = () => {
-	const [numbers] = useAtom(correctNumbersAtom);
-	console.log(correctNumbersAtom);
-	console.log(numbers);
+	const [numbers] = useAtom(correctedNumbersAtom);
+
 	return (
 		<ul className="correct-numbers">
-			{numbers.map((correctNumberAtom) => <CorrectNumber key={correctNumberAtom} correctNumberAtom={correctNumberAtom}/>)}
+			{numbers.map((n) => <CorrectNumber key={n.value} value={n.value} status={n.status} />)}
 		</ul>
 	);
 };

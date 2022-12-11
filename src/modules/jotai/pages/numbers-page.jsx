@@ -1,42 +1,47 @@
 import './numbers-page.less';
-import React, { useState, useEffect } from "react";
 import socketclient from "socket.io-client";
+import React, { useState, useEffect, useCallback, Suspense } from "react";
 import { useAtom } from 'jotai';
 import { CorrectNumbers } from "../components/correct-numbers/correct-numbers";
 import { HiddenNumbers } from "../components/hidden-numbers/hidden-numbers";
 import { UserRows } from "../components/user-rows/user-rows";
+import { startCorrectionAtom } from '../atoms/correct-numbers';
+import { fetchRowsAtom } from '../atoms/user-rows';
 import { FetchUserRowsBtn } from '../components/fetch-user-rows-btn/fetch-user-rows-btn';
-import { correctNumberStatus } from "../constants";
-import { rowsAtom } from '../atoms/atoms';
 import { StartCorrectionBtn } from '../components/start-correction-btn/start-correction-btn';
 
-const showLastNumber = (numbers) => {
-	if (numbers.length) {
-		const last = numbers.pop();
-		numbers.push({ ...last, status: correctNumberStatus.show });
-	}
-	return numbers;
-};
 
 export const NumbersPage = () => {
-	const [rows] = useAtom(rowsAtom);
-	// const [rows, setRows] = useState([]);
-	const [numbers, setNumbers] = useState([]);
-	const [correctNumber, setCorrectNumber] = useState();
-	const rowsFetched = Boolean(rows.length);
+	const [rowsFetched] = useAtom(fetchRowsAtom);
+	const [correctionStarted, startCorrection] = useAtom(startCorrectionAtom);
+	const [showFetchRowsBtn, setShowFetchRowsBtn] = useState(true);
+	const fetchRowsBtnClickCb = useCallback(() => setShowFetchRowsBtn(false), []);
+
+	useEffect(() => {
+		if (!showFetchRowsBtn && !correctionStarted) {
+			startCorrection();
+		}
+	}, [correctionStarted, showFetchRowsBtn, startCorrection]);
+
+
 
 	return (
 		<div className="numbers-page">
+			{showFetchRowsBtn && <FetchUserRowsBtn clickCb={fetchRowsBtnClickCb} />}
 			<div className="correct-numbers-wrapper">
-				<CorrectNumbers numbers={numbers.filter(({ status }) => status === correctNumberStatus.show)}/>
+				<CorrectNumbers />
 			</div>
-			{rowsFetched && <StartCorrectionBtn />}
-			{rowsFetched && <div className="user-rows-wrapper">
-				<UserRows />
-			</div>}
-			{!rowsFetched && <FetchUserRowsBtn />}
+			{!showFetchRowsBtn && (
+				<Suspense fallback="Loading rows..." >
+					{/*<StartCorrectionBtn />*/}
+					<div className="user-rows-wrapper">
+						<UserRows />
+					</div>
+				</Suspense>	
+			)}
+			
 			<div className="hidden-numbers-wrapper">
-				<HiddenNumbers numbers={numbers.filter(({ status }) => status === correctNumberStatus.hide)}/>
+				<HiddenNumbers />
 			</div>
 		</div>
 	);

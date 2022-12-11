@@ -1,25 +1,19 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { useAtom } from 'jotai';
 import { Button } from "../../../../components/button/button";
-import { rowsFetchingAtom } from "../../atoms/atoms"; 
-import { fetchRowsAtom } from "../../atoms/async-atoms"; 
+import { fetchRowsAtom } from "../../atoms/user-rows"; 
+import { fadeOut } from "./animations";
 
-export const FetchUserRowsBtn = () => {
-	const [rows, fetchRows] = useAtom(fetchRowsAtom);
-	const [rowsFetching, setRowsFetching] = useAtom(rowsFetchingAtom);
-	const handleButtonClick = useCallback(() => {
-		console.log('fetchRows ', rowsFetching)
-		if (!rowsFetching) {
-			setRowsFetching(true);
-			fetchRows();
-		}
-	}, [fetchRows, rowsFetching, setRowsFetching]);
+export const FetchUserRowsBtn = ({ clickCb }) => {
+	const ref = useRef();
+	const handleButtonClick = useCallback(() => fadeOut({ el: ref.current, onComplete: clickCb }), [clickCb]);
 	return (
 		<Button
+			ref={ref}
 			className='fetch-user-rows-btn' 
 			onClick={handleButtonClick}
 		>
-			{rowsFetching ? 'Loading rows...' : 'Get rows'}
+			{'Get rows'}
 		</Button>
 	);
 };
