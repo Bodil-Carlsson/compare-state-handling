@@ -1,19 +1,29 @@
+import { useUpdateAtom } from "jotai/utils";
 import React, { useLayoutEffect, useRef } from "react";
+import { useCallback } from "react";
 import { Button } from "../../../../components/button/button";
+import { startCorrectionAtom } from "../../atoms/correct-numbers";
 import { fadeIn } from "./animations";
 
-export const StartCorrectionBtn = () => {
+export const StartCorrectionBtn = ({ onClick }) => {
 	const ref = useRef();
+	const tlRef = useRef();
+	const startCorrection = useUpdateAtom(startCorrectionAtom);
 
 	useLayoutEffect(() => {
-		fadeIn({ el: ref.current });
+		tlRef.current = fadeIn({ el: ref.current });
 	}, []);
+
+	const startCorrectionClick = useCallback(() => {
+		startCorrection(true);
+		tlRef.current.reverse().then(onClick);
+	}, [startCorrection, onClick]);
 
 	return (
 		<Button
 			ref={ref} 
 			className='start-correction-btn' 
-			onClick={() => console.log('todo')}
+			onClick={startCorrectionClick}
 		>
 			Start
 		</Button>

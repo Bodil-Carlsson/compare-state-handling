@@ -2,23 +2,23 @@ import './hidden-numbers.less';
 import React, { useEffect, useRef } from 'react';
 import { useAtom } from 'jotai';
 import { HiddenNumber } from './hidden-number/hidden-number';
-import { waitingNumbersAtom, startCorrectionAtom } from '../../atoms/correct-numbers';
+import { hiddenNumbersAtom, isCorrectionStartedAtom } from '../../atoms/correct-numbers';
 import { fill } from './animations';
 
 export const HiddenNumbers = () =>  {
-	const [correctionStarted] = useAtom(startCorrectionAtom);
-	const [numbers] = useAtom(waitingNumbersAtom);
+	const [isCorrectionStarted] = useAtom(isCorrectionStartedAtom);
+	const [numbers] = useAtom(hiddenNumbersAtom);
 	const ref = useRef();
 
 	useEffect(() => {
-		if (correctionStarted) {
+		if (isCorrectionStarted) {
 			fill({ el: ref.current });
 		}
-	}, [correctionStarted])
-	console.log('hidden numbers', numbers);
+	}, [isCorrectionStarted]);
+
 	return (
 		<ul ref={ref} className='hidden-numbers'>
-			{numbers.map((n) => <HiddenNumber key={n.value} value={n.value} status={n.status} />)}
+			{numbers.map((n) => <HiddenNumber key={n} value={n} />)}
 		</ul>
 	);
 };

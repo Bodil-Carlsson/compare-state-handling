@@ -1,12 +1,21 @@
 import React, { useCallback, useRef } from "react";
-import { useAtom } from 'jotai';
+import { useUpdateAtom } from 'jotai/utils';
 import { Button } from "../../../../components/button/button";
-import { fetchRowsAtom } from "../../atoms/user-rows"; 
+import { fetchUserRowsAtom } from "../../atoms/user-rows"; 
 import { fadeOut } from "./animations";
 
-export const FetchUserRowsBtn = ({ clickCb }) => {
+export const FetchUserRowsBtn = ({ onClick }) => {
 	const ref = useRef();
-	const handleButtonClick = useCallback(() => fadeOut({ el: ref.current, onComplete: clickCb }), [clickCb]);
+	const fetchRows = useUpdateAtom(fetchUserRowsAtom);
+	const handleButtonClick = useCallback(
+		() => fadeOut({ 
+			el: ref.current, 
+			onStart: fetchRows, 
+			onComplete: onClick
+		}), 
+		[fetchRows, onClick]
+	);
+
 	return (
 		<Button
 			ref={ref}

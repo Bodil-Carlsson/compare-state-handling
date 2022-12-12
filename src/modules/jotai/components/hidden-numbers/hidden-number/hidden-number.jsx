@@ -1,22 +1,19 @@
 import './hidden-number.less';
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, useMemo } from 'react';
 import { useUpdateAtom } from 'jotai/utils';
 import { correctNumberStatus } from '../../../constants';
 import { show, hide } from './animations';
-import { correctNumberWaitingAtom } from '../../../atoms/correct-numbers';
-import { useEffect } from 'react';
+import { correctNumberWaitingAtom, selectCorrectNumberStatusAtom } from '../../../atoms/correct-numbers';
+import { useAtom } from 'jotai';
 
-export const HiddenNumber = ({ value, status }) =>  {
+export const HiddenNumber = ({ value }) =>  {
 	const ref = useRef();
+	const numberStatusAtom = useMemo(() => selectCorrectNumberStatusAtom(value), [value]);
+	const [status] = useAtom(numberStatusAtom);
 	const updateToWaiting = useUpdateAtom(correctNumberWaitingAtom);
-
-	useEffect(() => (console.log('value', value)), [value]);
-	useEffect(() => (console.log('status', status)), [status]);
-	useEffect(() => (console.log('updateToWaiting', updateToWaiting)), [updateToWaiting]);
 
 	useLayoutEffect(() => {
 		if (status === correctNumberStatus.received) {
-			console.log('hidden number', value);
 			show({
 				el: ref.current,
 				onComplete: () => updateToWaiting(value)

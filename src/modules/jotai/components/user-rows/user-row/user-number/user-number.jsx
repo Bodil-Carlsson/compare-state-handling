@@ -1,28 +1,30 @@
 import './user-number.less';
-import React from "react";
-import { useAtom } from 'jotai';
+import React, { useMemo } from "react";
+import { useAtom, useAtomValue } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
-import { correctingNumberAtom } from '../../../../atoms/correct-numbers';
-import { updateUserNumberStatusAtom } from '../../../../atoms/user-rows';
+import { selectUserNumberStatusAtom, updateUserNumberStatusAtom } from '../../../../atoms/user-rows';
 import { userNumberStatus } from '../../../../constants';
 import { useLayoutEffect, useRef } from 'react';
 import { correct } from './animations';
+import { correctingNumberAtom } from '../../../../atoms/correct-numbers';
 
-export const UserNumber = ({ rowId, value, status }) => {
-	const [correctingNumber] = useAtom(correctingNumberAtom);
-	const updateUserNumberStatus = useUpdateAtom(updateUserNumberStatusAtom);
+export const UserNumber = ({ rowId, value }) => {
+	const numberStatusAtom = useMemo(() => selectUserNumberStatusAtom(rowId, value), [rowId, value]);
+	const [status] = useAtom(numberStatusAtom);
+	const correctingNumber = useAtomValue(correctingNumberAtom);
+	const updateStatus = useUpdateAtom(updateUserNumberStatusAtom);
 	const ref = useRef();
 
 	useLayoutEffect(() => {
 		let tl;
-		if (value && value === correctingNumber) {
+		if (value && correctingNumber && value === correctingNumber.value) {
 			tl = correct({
 				el: ref.current,
-				onComplete: () => updateUserNumberStatus({ rowId, value, status: userNumberStatus.corrected })
+				onComplete: () => updateStatus({ rowId, value, status: userNumberStatus.corrected })
 			});
 		}
 		return () => tl?.revert?.();
-	}, [correctingNumber, updateUserNumberStatus, value, rowId]);
+	}, [correctingNumber, updateStatus, value, rowId]);
 
 	return (
 		<li ref={ref} className={`user-number${status === userNumberStatus.corrected ? ' correct' : ''}`}>
