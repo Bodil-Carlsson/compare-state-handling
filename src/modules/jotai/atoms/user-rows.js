@@ -1,9 +1,10 @@
 import { atom } from 'jotai';
 import { selectAtom } from 'jotai/utils';
 import { userNumberStatus } from '../constants';
+import { correctingNumberAtom } from './correct-numbers';
 
 const fetchRows = async () => {
-	const res = await fetch('http://localhost:3000/api/user/rows', { method: 'GET' });
+	const res = await fetch('/api/user/rows', { method: 'GET' });
 	const { rows } = await res.json();
 	return rows.map((row) => ({
 		...row,
@@ -32,7 +33,6 @@ const selectRowAtom = (rowId) => {
 	return selectRowAtom;
 };
 
-
 export const userRowIdsAtom = atom(
 	(get) => rowIds(get(rowsAtom))
 );
@@ -56,11 +56,31 @@ export const updateUserNumberStatusAtom = atom(
 	null, 
 	(get, set, { rowId, value, status }) => {
 		const rows = [...get(rowsAtom)];
-		const rowIndex = rows.findIndex((row) => row.id === rowId);
-		rows[rowIndex] = {
-			...rows[rowIndex],
-			numbers: rows[rowIndex].numbers.map((n) => n.value === value ? ({ value, status }) : n)
+		rows[rowId] = {
+			...rows[rowId],
+			numbers: rows[rowId].numbers.map((n) => n.value === value ? ({ value, status }) : n)
 		};
 		set(rowsAtom, rows);
 	}
 );
+updateUserNumberStatusAtom.debugLabel = 'updateUserNumberStatusAtom';
+
+const rowsWithNumber = (rows, number) => rows.filter((r) => r.numbers.find((n) => n.value === number && n.status !== userNumberStatus.corrected));
+
+const rowsToCorrectAtom = atom(
+	(get) => {
+		const rows = rowsWithNumber(get(rowsAtom), get(correctingNumberAtom)?.value);
+		const sorted = get(userRowIdsAtom).filter((id) => rows.find((r) => r.id === id));
+		return sorted.map((id) => rows.find((r) => r.id === id));
+	}
+);
+
+export const userRowsToCorrectAtom = selectAtom(rowsToCorrectAtom, (rows) => {
+	console.log('userRowsToCorrect', rows);
+	return rows;
+}, (a, b) => {
+	console.log('a', a);
+	console.log('b', b);
+	return a.length === b.length;
+});
+userRowsToCorrectAtom.debugLabel = 'userRowsToCorrectAtom';

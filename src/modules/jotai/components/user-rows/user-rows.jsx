@@ -4,11 +4,12 @@ import { UserRow } from './user-row/user-row';
 import { userRowIdsAtom } from '../../atoms/user-rows';
 import { showRows } from './animations';
 import { useUpdateAtom } from 'jotai/utils';
-import { isReadyToStartCorrectionAtom } from '../../atoms/correct-numbers';
+import { correctionStatusAtom } from '../../atoms/correct-numbers';
+import { correctionStatus } from '../../constants';
 
 export const UserRows = () => {
 	const [rowIds] = useAtom(userRowIdsAtom);
-	const setIsReadyToStartCorrection = useUpdateAtom(isReadyToStartCorrectionAtom);
+	const setCorrectionStatus = useUpdateAtom(correctionStatusAtom);
 	const ref = useRef();
 
 	useLayoutEffect(() => {
@@ -16,10 +17,10 @@ export const UserRows = () => {
 			el: ref.current, 
 			onComplete: () => {
 				tl.revert();
-				setIsReadyToStartCorrection(true);
+				setCorrectionStatus(correctionStatus.readyToStart);
 			}
 		});
-	}, [setIsReadyToStartCorrection]);
+	}, [setCorrectionStatus]);
 
 	return (
 		<ul ref={ref} className='user-rows'>

@@ -37,3 +37,11 @@ export const userNumberStatus = {
 	correcting: uns.indexOf(correcting),
 	corrected: uns.indexOf(corrected)
 };
+
+export const correctionStatus = {
+	initial: 0,
+	readyToStart: 1,
+	starting: 2,
+	started: 3,
+	completed: 4
+};

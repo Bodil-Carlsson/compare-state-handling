@@ -1,17 +1,16 @@
 import { useAtom } from "jotai";
 import React from "react";
-import { useState } from "react";
-import { isReadyToStartCorrectionAtom } from "../atoms/correct-numbers";
+import { correctionStatusAtom } from "../atoms/correct-numbers";
 import { StartCorrectionBtn } from "../components/start-correction-btn/start-correction-btn";
 import { CorrectNumbers } from "../components/correct-numbers/correct-numbers";
+import { correctionStatus } from "../constants";
 
 export const CorrectNumbersContainer = () => {
-	const [isReadyToStart] = useAtom(isReadyToStartCorrectionAtom);
-	const [showStartBtn, setShowStartBtn] = useState(true);
+	const [status] = useAtom(correctionStatusAtom);
 
-	if (isReadyToStart && showStartBtn) {
+	if (status === correctionStatus.readyToStart) {
 		return (
-			<StartCorrectionBtn onClick={() => setShowStartBtn(false)} />
+			<StartCorrectionBtn />
 		);
 	}
 

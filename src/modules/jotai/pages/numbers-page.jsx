@@ -1,5 +1,5 @@
 import './numbers-page.less';
-import React from "react";
+import React, { Suspense } from "react";
 import { UserRowsContainer } from '../containers/user-rows-container';
 import { CorrectNumbersContainer } from '../containers/correct-numbers-container';
 import { HiddenNumbers } from '../components/hidden-numbers/hidden-numbers';
@@ -18,7 +18,9 @@ export const NumbersPage = () => {
 			<div className="hidden-numbers-wrapper">
 				<HiddenNumbers />
 			</div>
-			<NumbersCorrection />
+			<Suspense fallback="">
+				<NumbersCorrection />
+			</Suspense>
 		</div>
 	);
 }

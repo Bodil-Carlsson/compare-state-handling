@@ -4,12 +4,12 @@ import { useAtom } from "jotai";
 import { useUpdateAtom } from 'jotai/utils';
 import { correctNumberStatus } from "../../../constants";
 import { show } from "./animations";
-import { selectCorrectNumberStatusAtom, correctNumberCorrectingAtom } from '../../../atoms/correct-numbers';
+import { selectCorrectNumberStatusAtom, correctingNumberAtom } from '../../../atoms/correct-numbers';
 
 export const CorrectNumber = ({ value }) => {
 	const numberStatusAtom = useMemo(() => selectCorrectNumberStatusAtom(value), [value]);
 	const [status] = useAtom(numberStatusAtom);
-	const updateToCorrecting = useUpdateAtom(correctNumberCorrectingAtom);
+	const updateToCorrecting = useUpdateAtom(correctingNumberAtom);
 	const ref = useRef();
 
 	useLayoutEffect(() => {
