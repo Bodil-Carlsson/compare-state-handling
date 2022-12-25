@@ -1,7 +1,6 @@
-import './correct-count.less';
 import React, { useMemo } from "react";
 import { useSelector } from 'react-redux';
-import { createSelectUserRowCorrectCount } from '../../../../store/slices/user-rows/selectors';
+import { createSelectUserRowCorrectCount } from '../../../store/slices/user-rows/selectors';
 
 export const CorrectCount = ({ rowId }) => {
 	const selectCorrectCount = useMemo(createSelectUserRowCorrectCount, []);

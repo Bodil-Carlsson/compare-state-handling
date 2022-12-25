@@ -7,6 +7,7 @@ export function showRows({ el, onStart, onComplete }) {
 	});
 	return tl;
 }
+
 export function sortRows({ el, currOrder, sortedOrder, onStart, onComplete }) {
 	const children = [];
 	el.childNodes.forEach((child, index) => {
@@ -18,6 +19,7 @@ export function sortRows({ el, currOrder, sortedOrder, onStart, onComplete }) {
 			y: child.getBoundingClientRect().y
 		});
 	});
+
 	const tl = gsap.timeline({ onStart, onComplete });
 	children.forEach((child, index) => {
 		tl.to(child.el, { y: children[child.sortIndex].y - child.y, duration: 3 }, index === 0 ? '>' : '<');

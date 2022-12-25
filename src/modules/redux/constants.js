@@ -1,6 +1,5 @@
-import gsap from "gsap";
-
-export const globalTimeline = gsap.timeline();
+export * from '../../components/correct-numbers/animations';
+export * from '../../components/user-rows/animations';
 
 export const routePaths = {
 	base: '/redux',

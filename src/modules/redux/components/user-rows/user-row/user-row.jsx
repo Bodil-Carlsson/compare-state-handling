@@ -1,12 +1,10 @@
-import './user-row.less';
 import React, { useLayoutEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { userNumberStatus } from '../../../constants';
-import { sortRow } from './animations';
+import { userRowAnimations as animations } from '../../../constants';
 import { sortNumbers } from '../../../store/slices/user-rows/utils';
 import { userRowSorted } from '../../../store/slices/user-rows/actions';
-import { UserNumber } from './user-number/user-number';
-import { CorrectCount } from './correct-count/correct-count';
+import { UserNumber } from './user-number';
+import { CorrectCount } from './correct-count';
 import { selectUserRowNumbers, selectUserRowIsSorting } from '../../../store/slices/user-rows/selectors';
 
 export const UserRow = ({ id }) => {
@@ -18,7 +16,7 @@ export const UserRow = ({ id }) => {
 	useLayoutEffect(() => {
 		let tl;
 		if (isSorting) {
-			tl = sortRow({
+			tl = animations.sortRow({
 				el: ref.current,
 				currOrder: numbers,
 				sortedOrder: sortNumbers(numbers),

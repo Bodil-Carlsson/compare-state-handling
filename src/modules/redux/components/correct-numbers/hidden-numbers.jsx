@@ -1,8 +1,7 @@
-import './hidden-numbers.less';
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { fill } from "./animations";
-import { HiddenNumber } from './hidden-number/hidden-number';
+import { hiddenNumbersAnimations as animations } from '../../constants';
+import { HiddenNumber } from './hidden-number';
 import { selectHiddenNumbers, selectCorrectionStarted } from '../../store/slices/correct-numbers/selectors';
 
 export const HiddenNumbers = () =>  {
@@ -12,7 +11,7 @@ export const HiddenNumbers = () =>  {
 
 	useEffect(() => {
 		if (correctionStarted) {
-			fill({ el: ref.current });
+			animations.fill({ el: ref.current });
 		}
 	}, [correctionStarted])
 

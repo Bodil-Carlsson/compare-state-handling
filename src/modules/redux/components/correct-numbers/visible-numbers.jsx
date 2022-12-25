@@ -1,7 +1,6 @@
-import './correct-numbers.less';
 import React from "react";
 import { useSelector } from 'react-redux';
-import { CorrectNumber } from "./correct-number/correct-number";
+import { CorrectNumber } from "./visible-number";
 import { selectVisibleNumbers } from '../../store/slices/correct-numbers/selectors';
 
 export const CorrectNumbers = () => {

@@ -1,7 +1,6 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "../../../../components/button/button";
-import { fadeIn } from "./animations";
 import { startCorrection } from "../../store/slices/correct-numbers/actions";
 
 export const StartCorrectionBtn = () => {
@@ -9,14 +8,20 @@ export const StartCorrectionBtn = () => {
 	const ref = useRef();
 
 	useLayoutEffect(() => {
-		fadeIn({ el: ref.current });
+		ref.current.show();
 	}, []);
+
+	const handleClickStartCorrection = useCallback(() => {
+		ref.current.hide({
+			onStart: () => dispatch(startCorrection())
+		});
+	}, [dispatch]);
 
 	return (
 		<Button
 			ref={ref} 
 			className='start-correction-btn' 
-			onClick={() => dispatch(startCorrection())}
+			onClick={handleClickStartCorrection}
 		>
 			Start
 		</Button>

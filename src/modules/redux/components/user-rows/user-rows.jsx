@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { showRows, sortRows } from './animations';
+import { userRowsAnimations as animations } from '../../constants';
 import { UserRow } from './user-row/user-row';
 import { selectRowIds, selectIsSorting, selectSortedIds } from '../../store/slices/user-rows/selectors';
 import { sortRowIds } from '../../store/slices/user-rows/utils';
@@ -14,7 +14,7 @@ export const UserRows = () => {
 	const ref = useRef();
 
 	useLayoutEffect(() => {
-		const tl = showRows({ 
+		const tl = animations.showRows({ 
 			el: ref.current, 
 			onComplete: () => tl.revert() 
 		});
@@ -23,7 +23,7 @@ export const UserRows = () => {
 	useLayoutEffect(() => {
 		let tl;
 		if (isSorting) {
-			tl = sortRows({
+			tl = animations.sortRows({
 				el: ref.current,
 				currOrder: rowIds,
 				sortedOrder: sortedIds,

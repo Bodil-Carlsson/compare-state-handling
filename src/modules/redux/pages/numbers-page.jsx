@@ -1,10 +1,10 @@
 import './numbers-page.less';
 import React from "react";
 import { useSelector } from 'react-redux';
-import { StartCorrectionBtn } from '../components/start-correction-btn/start-correction-btn';
-import { FetchUserRowsBtn } from '../components/fetch-user-rows-btn/fetch-user-rows-btn';
-import { CorrectNumbers } from "../components/correct-numbers/correct-numbers";
-import { HiddenNumbers } from "../components/hidden-numbers/hidden-numbers";
+import { StartCorrectionBtn } from '../components/correct-numbers/start-correction-btn';
+import { FetchUserRowsBtn } from '../components/user-rows/fetch-user-rows-btn';
+import { CorrectNumbers } from "../components/correct-numbers/visible-numbers";
+import { HiddenNumbers } from "../components/correct-numbers/hidden-numbers";
 import { UserRows } from "../components/user-rows/user-rows";
 import { selectCorrectionStarted } from '../store/slices/correct-numbers/selectors';
 

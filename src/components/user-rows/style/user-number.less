@@ -1,0 +1,11 @@
+@import (reference) '../../number/style.less';
+@import (reference) '../../common-style/colors.less';
+
+.user-number {
+	.number();
+	background-color: @gray;
+	&.correct {
+		background-color: @correct;
+		font-weight: 600;
+	}
+}
