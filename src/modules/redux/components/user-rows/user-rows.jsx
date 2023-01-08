@@ -1,44 +1,52 @@
-import React, { useLayoutEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { userRowsAnimations as animations } from '../../constants';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { userRowsAnimations as animations } from '../../animations';
+import { correctionReadyToStart, correctNumberCorrected } from '../../store/slices/correct-numbers/actions';
+import { userRowsSortRows } from '../../store/slices/user-rows/actions';
+import { selectIsCorrectionOfNumberComplete, selectUserRowIds, selectPresortedUserRowIds } from '../../store/slices/user-rows/selectors';
 import { UserRow } from './user-row/user-row';
-import { selectRowIds, selectIsSorting, selectSortedIds } from '../../store/slices/user-rows/selectors';
-import { sortRowIds } from '../../store/slices/user-rows/utils';
-import { userRowsSorted } from '../../store/slices/user-rows/actions';
 
 export const UserRows = () => {
-	const rowIds = useSelector(selectRowIds);
-	const sortedIds = useSelector(selectSortedIds);
-	const isSorting = useSelector(selectIsSorting);
-	const dispatch = useDispatch();
-	const ref = useRef();
+
+const sortedRows = useSelector(selectPresortedUserRowIds);
+const isCorrectionOfNumberComplete = useSelector(selectIsCorrectionOfNumberComplete);
+
+
+const dispatch = useDispatch();
+const ref = useRef();
+const rowIds = useSelector(selectUserRowIds);
 
 	useLayoutEffect(() => {
-		const tl = animations.showRows({ 
-			el: ref.current, 
-			onComplete: () => tl.revert() 
+		const tl = animations.showRows({
+			el: ref.current,
+			onComplete: () => dispatch(correctionReadyToStart())
 		});
-	}, []);
+		return () => tl?.revert?.();
+	}, [dispatch]);
+
 
 	useLayoutEffect(() => {
-		let tl;
-		if (isSorting) {
-			tl = animations.sortRows({
+		if (sortedRows) {
+			const tl = animations.sortRows({
 				el: ref.current,
 				currOrder: rowIds,
-				sortedOrder: sortedIds,
-				onComplete: () => {
-					dispatch(userRowsSorted());
-				}
+				sortedOrder: sortedRows,
+				onComplete: () => dispatch(userRowsSortRows())
 			});
+			return () => tl?.revert?.();
 		}
-		return () => tl?.revert?.();
-	}, [isSorting, rowIds, sortedIds, dispatch]);
+	}, [dispatch, rowIds, sortedRows]);
+
+	useEffect(() => {
+		if (isCorrectionOfNumberComplete) {
+			dispatch(correctNumberCorrected());
+		}
+	}, [isCorrectionOfNumberComplete, dispatch]);
 
 	return (
 		<ul ref={ref} className='user-rows'>
 			{rowIds.map((id) => (
-				<UserRow key={id} id={id} />
+				<UserRow key={id} rowId={id} />
 			))}
 		</ul>
 	);

@@ -1,115 +1,105 @@
 import {
-	addUserRows,
-	correctUserNumber,
-	userNumberCorrected,
-	sortUserRow,
-	userRowSorted,
-	sortUserRows,
-	userRowsSorted
+	USER_ROWS_ADD,
+	USER_ROWS_CORRECT_NUMBER,
+	USER_ROWS_SORT_ROW,
+	USER_ROWS_SORT_ROWS
 } from './action-types';
-import { startCorrectingNumber } from '../correct-numbers/action-types';
-import { userNumberStatus } from '../../../constants';
-import { sortNumbers, sortRowIds, numbersNeedsSorting } from './utils';
+import { 
+	CORRECT_NUMBER_CORRECTED, 
+	CORRECT_NUMBER_CORRECTING 
+} from '../correct-numbers/action-types';
+import { 
+	sortNumbers, 
+	correctCount, 
+	numbersNeedsSorting 
+} from './utils';
+
 const initialState = {
 	rowIds: [],
 	rows: [],
-	numberToCorrect: null,
-	isSorting: false
-};
-
-const updateNumberStatus = (rows, rowId, numberToCorrect, status) => {
-	return rows.map((row) => row.id === rowId ? 
-		({
-			...row, 
-			numbers: row.numbers.map((number) => number.value === numberToCorrect ? 
-				({ ...number, status }) : 
-				number
-			) 
-		}) : 
-		row
-	)
+	correctNumber: null,
+	numbersToCorrect: []
 };
 
 const reducer = (state = initialState, action) => {
 	switch(action.type) {
-		case addUserRows: {
-			return { 
+
+		case USER_ROWS_ADD: {
+			return {
 				...state,
-				rowIds: action.rows.map((row) => row.id),
-				sortedIds: action.rows.map((row) => row.id),
-				rows: action.rows.map((row) => ({ 
-					...row,
-					isSorting: false,
-					isCorrecting: false,
-					numbers: row.numbers.map((number) => ({ 
-						...number,
-						status: userNumberStatus.initial
-					}))
+				rowIds: action.rows.map((r) => r.id),
+				rows: action.rows.map((r) => ({ 
+					...r,
+					numberValues: r.numbers.map((n) => n.value),
+					numbers: r.numbers.reduce((acc, n) => (
+						Object.assign(acc, { [n.value]: { ...n, isCorrect: false } })
+					), {})
 				}))
 			};
 		}
 
-		case startCorrectingNumber: {
+		case USER_ROWS_CORRECT_NUMBER: {
 			return {
 				...state,
-				numberToCorrect: action.number
-			};
-		}
-
-		case correctUserNumber: {
-			return {
-				...state,
-				rows: updateNumberStatus(state.rows, action.rowId, action.number, userNumberStatus.correcting)
-			};
-		}
-
-		case userNumberCorrected: {
-			return {
-				...state,
-				rows: updateNumberStatus(state.rows, action.rowId, action.number, userNumberStatus.corrected)
-			};
-		}
-
-		case sortUserRow: {
-			return {
-				...state,
-				rows: state.rows.map((row) => row.id === action.rowId ? 
+				rows: state.rows.map((r) => r.id === action.rowId ?
 					({
-						...row,
-						isSorting: true
-					}) : 
-					row
-				)
+						...r,
+						numbers: { 
+							...r.numbers, 
+							[action.numberValue]: { 
+								...r.numbers[action.numberValue], 
+								isCorrect: true
+							} 
+						}
+					}) : r
+				),
+				numbersToCorrect: state.numbersToCorrect.map((n) => n.rowId === action.rowId ? { ...n, corrected: true } : n)
 			};
 		}
 
-		case userRowSorted: {
+		case USER_ROWS_SORT_ROW: {
 			return {
 				...state,
-				rows: state.rows.map((row) => row.id === action.rowId ? 
+				rows: state.rows.map((r) => r.id === action.rowId ?
 					({
-						...row,
-						isSorting: false,
-						numbers: sortNumbers(row.numbers)
-					}) : 
-					row
-				)
+						...r,
+						numberValues: sortNumbers(state.rows[r.id])
+					}) : r
+				),
+				numbersToCorrect: state.numbersToCorrect.map((n) => n.rowId === action.rowId ? { ...n, sorted: true } : n)
 			};
 		}
 
-		case sortUserRows: {
+		case USER_ROWS_SORT_ROWS: {
 			return {
 				...state,
-				isSorting: true,
-				sortedIds: sortRowIds(state.rowIds, state.rows)
+				rowIds: [...state.rowIds].sort((a, b) => correctCount(state.rows[b].numbers) - correctCount(state.rows[a].numbers))
 			};
 		}
 
-		case userRowsSorted: {
-			return{
+		case CORRECT_NUMBER_CORRECTING: {
+			return {
 				...state,
-				isSorting: false,
-				rowIds: [...state.sortedIds]
+				correctNumber: action.numberValue,
+				numbersToCorrect: state.rowIds.reduce((arr, rowId) => {
+					if (state.rows[rowId].numbers[action.numberValue]) {
+						arr.push({ 
+							rowId, 
+							numberValue: action.numberValue, 
+							corrected: false,
+							sorted: !numbersNeedsSorting(state.rows[rowId], action.numberValue)
+						});
+					}
+					return arr;
+				}, [])
+			};
+		}
+
+		case CORRECT_NUMBER_CORRECTED: {
+			return {
+				...state,
+				correctNumber: null,
+				numbersToCorrect: []
 			};
 		}
 

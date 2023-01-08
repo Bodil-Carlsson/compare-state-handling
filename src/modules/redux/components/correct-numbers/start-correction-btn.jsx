@@ -1,11 +1,11 @@
-import React, { useLayoutEffect, useRef, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import React, { useLayoutEffect, useCallback, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { Button } from "../../../../components/button/button";
-import { startCorrection } from "../../store/slices/correct-numbers/actions";
+import { correctionStarting } from "../../store/slices/correct-numbers/actions";
 
 export const StartCorrectionBtn = () => {
-	const dispatch = useDispatch();
 	const ref = useRef();
+	const dispatch = useDispatch();
 
 	useLayoutEffect(() => {
 		ref.current.show();
@@ -13,7 +13,7 @@ export const StartCorrectionBtn = () => {
 
 	const handleClickStartCorrection = useCallback(() => {
 		ref.current.hide({
-			onStart: () => dispatch(startCorrection())
+			onStart: () => dispatch(correctionStarting())
 		});
 	}, [dispatch]);
 

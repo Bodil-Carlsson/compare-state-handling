@@ -1,18 +1,30 @@
-import actionTypes from "./action-types";
+import {
+	CORRECT_NUMBER_RECEIVED,
+	CORRECT_NUMBER_WAITING,
+	CORRECT_NUMBER_ANIMATING,
+	CORRECT_NUMBER_CORRECTING,
+	CORRECT_NUMBER_CORRECTED,
+	CORRECTION_READY_TO_START,
+	CORRECTION_STARTING,
+	CORRECTION_STARTED
+} from './action-types';
 
-export const startCorrection = () => ({ type: actionTypes.startCorrection });
-export const correctNumberReceived = (number) => ({ type: actionTypes.correctNumberReceived, number });
-export const correctNumberWaiting = (number) => ({ type: actionTypes.correctNumberWaiting, number });
-export const showCorrectNumber = (number) => ({ type: actionTypes.showCorrectNumber, number });
-export const startCorrectingNumber = (number) => ({ type: actionTypes.startCorrectingNumber, number });
-export const correctNumberCorrected = (number) => ({ type: actionTypes.correctNumberCorrected, number });
-
+export const correctNumberReceived = (numberValue) => ({ type: CORRECT_NUMBER_RECEIVED, numberValue });
+export const correctNumberWaiting = (numberValue) => ({ type: CORRECT_NUMBER_WAITING, numberValue });
+export const correctNumberAnimating = (numberValue) => ({ type: CORRECT_NUMBER_ANIMATING, numberValue });
+export const correctNumberCorrecting = (numberValue) => ({ type: CORRECT_NUMBER_CORRECTING, numberValue });
+export const correctNumberCorrected = () => ({ type: CORRECT_NUMBER_CORRECTED });
+export const correctionReadyToStart = () => ({ type: CORRECTION_READY_TO_START });
+export const correctionStarting = () => ({ type: CORRECTION_STARTING });
+export const correctionStarted = () => ({ type: CORRECTION_STARTED });
 
 export default {
-	startCorrection,
 	correctNumberReceived,
 	correctNumberWaiting,
-	showCorrectNumber,
-	startCorrectingNumber,
-	correctNumberCorrected
+	correctNumberAnimating,
+	correctNumberCorrecting,
+	correctNumberCorrected,
+	correctionReadyToStart,
+	correctionStarting,
+	correctionStarted
 };

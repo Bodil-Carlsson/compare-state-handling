@@ -1,8 +1,7 @@
-import { addUserRows } from "../slices/user-rows/actions";
+import { userRowsAdd } from "../slices/user-rows/actions";
 
-export const fetchUserRows = () => async (dispatch, getState) => {
-	const res = await fetch('http://localhost:3000/api/user/rows', { method: 'GET' });
+export const fetchUserRows = () => async (dispatch) => {
+	const res = await fetch('/api/user/rows', { method: 'GET' });
 	const { rows } = await res.json();
-
-	dispatch(addUserRows(rows));
+	dispatch(userRowsAdd(rows));
 };

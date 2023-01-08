@@ -1,17 +1,11 @@
-export const addUserRows = 'addUserRows';
-export const correctUserNumber = 'correctUserNumber';
-export const userNumberCorrected = 'userNumberCorrected';
-export const sortUserRow = 'sortUserRow';
-export const userRowSorted = 'userRowSorted';
-export const sortUserRows = 'sortUserRows';
-export const userRowsSorted = 'userRowsSorted';
+export const USER_ROWS_ADD = 'USER_ROWS_ADD';
+export const USER_ROWS_CORRECT_NUMBER = 'USER_ROWS_CORRECT_NUMBER';
+export const USER_ROWS_SORT_ROW = 'USER_ROWS_SORT_ROW';
+export const USER_ROWS_SORT_ROWS = 'USER_ROWS_SORT_ROWS';
 
 export default {
-	addUserRows,
-	correctUserNumber,
-	userNumberCorrected,
-	sortUserRow,
-	userRowSorted,
-	sortUserRows,
-	userRowsSorted
+	USER_ROWS_ADD,
+	USER_ROWS_CORRECT_NUMBER,
+	USER_ROWS_SORT_ROW,
+	USER_ROWS_SORT_ROWS
 };

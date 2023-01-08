@@ -1,12 +1,9 @@
-export * from '../../components/correct-numbers/animations';
-export * from '../../components/user-rows/animations';
 
 export const routePaths = {
 	base: '/redux',
 	numbers: '/redux/numbers'
 };
 
-const initial = 'initial';
 const received = 'received';
 const waiting = 'waiting';
 const animating = 'animating';
@@ -29,15 +26,24 @@ export const correctNumberStatus = {
 	corrected: cns.indexOf(corrected)
 };
 
-const uns = [
+const initial = 'initial';
+const readyToStart = 'readyToStart';
+const starting = 'starting';
+const started = 'started';
+const completed = 'completed';
+
+const cs = [
 	initial,
-	correcting,
-	corrected
+	readyToStart,
+	starting,
+	started,
+	completed
 ];
 
-export const userNumberStatus = {
-	initial: uns.indexOf(initial),
-	correcting: uns.indexOf(correcting),
-	corrected: uns.indexOf(corrected)
+export const correctionStatus = {
+	initial: cs.indexOf(initial),
+	readyToStart: cs.indexOf(readyToStart),
+	starting: cs.indexOf(starting),
+	started: cs.indexOf(started),
+	completed: cs.indexOf(completed)
 };
-

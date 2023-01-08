@@ -1,22 +1,24 @@
-import React, { useLayoutEffect, useRef, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { correctNumberAnimations as animations, correctNumberStatus } from "../../constants";
-import { startCorrectingNumber } from "../../store/slices/correct-numbers/actions";
-import { createSelectCorrectNumberStatus } from "../../store/slices/correct-numbers/selectors";
+import React, { useLayoutEffect, useMemo, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { correctNumberAnimations as animations } from "../../animations";
+import { correctNumberStatus } from "../../constants";
+import { correctNumberCorrecting } from "../../store/slices/correct-numbers/actions";
+import { createCorrectNumberStatusSelector } from "../../store/slices/correct-numbers/selectors";
 
-export const CorrectNumber = ({ value }) => {
-	const selectCorrectNumberStatus = useMemo(createSelectCorrectNumberStatus, []);
-	const status = useSelector((state) => selectCorrectNumberStatus(state, value));
-	const dispatch = useDispatch();
+export const VisibleNumber = ({ value }) => {
+	const selectStatus = useMemo(() => createCorrectNumberStatusSelector(value), [value]);
 	const ref = useRef();
+	const dispatch = useDispatch();
+	const status = useSelector(selectStatus);
 
 	useLayoutEffect(() => {
 		if (status === correctNumberStatus.animating) {
-			animations.show({
-				el: ref.current,
-				number: value,
-				onComplete: () => dispatch(startCorrectingNumber(value))
-			})
+			const tl = animations.show({ 
+				el: ref.current, 
+				number: value, 
+				onComplete: () => dispatch(correctNumberCorrecting(value)) 
+			});
+			return () => tl?.revert?.();
 		}
 	}, [status, value, dispatch]);
 

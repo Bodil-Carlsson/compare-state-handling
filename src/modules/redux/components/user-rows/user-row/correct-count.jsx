@@ -1,10 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { createSelectUserRowCorrectCount } from '../../../store/slices/user-rows/selectors';
+import { createCorrectCountSelector } from '../../../store/slices/user-rows/selectors';  
 
 export const CorrectCount = ({ rowId }) => {
-	const selectCorrectCount = useMemo(createSelectUserRowCorrectCount, []);
-	const correctCount = useSelector((state) => selectCorrectCount(state, rowId));
+	const selectCorrectCount = useMemo(() => createCorrectCountSelector(rowId), [rowId]);
+	const correctCount = useSelector(selectCorrectCount);
 	return (
 		<div className='correct-count'>
 			{correctCount} <span className='correct-count-max'>/10</span>

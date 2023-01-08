@@ -3,10 +3,10 @@ import gsap from "gsap";
 export function sortRow({ el, currOrder, sortedOrder, onStart, onComplete }) {
 	const children = [];
 	el.childNodes.forEach((child, index) => {
-		const { value } = currOrder[index];
+		const value = currOrder[index];
 		children.push({
 			el: child,
-			sortIndex: sortedOrder.findIndex((n) => n.value === value),
+			sortIndex: sortedOrder.findIndex((n) => n === value),
 			currIndex: index,
 			x: child.getBoundingClientRect().x
 		});

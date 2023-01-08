@@ -1,65 +1,98 @@
-import { correctNumberStatus } from '../../../constants';
+import { 
+	correctionStatus, 
+	correctNumberStatus 
+} from '../../../constants';
 import {
-	startCorrection,
-	correctNumberReceived,
-	correctNumberWaiting,
-	showCorrectNumber,
-	startCorrectingNumber,
-	correctNumberCorrected
+	CORRECT_NUMBER_RECEIVED,
+	CORRECT_NUMBER_WAITING,
+	CORRECT_NUMBER_ANIMATING,
+	CORRECT_NUMBER_CORRECTING,
+	CORRECT_NUMBER_CORRECTED,
+	CORRECTION_READY_TO_START,
+	CORRECTION_STARTING,
+	CORRECTION_STARTED
 } from './action-types';
 
 const initialState = {
-	correctionStarted: false,
+	correctionStatus: correctionStatus.initial,
 	numbers: []
 };
-
-const updateNumberStatus = (numbers, number, status) => numbers.map((n) => n.value === number ? ({ ...n, status }) : n);
 
 const reducer = (state = initialState, action) => {
 	switch(action.type) {
 
-		case startCorrection: {
-			return { 
-				...state, 
-				correctionStarted: true 
-			};
-		}
-
-		case correctNumberReceived: {
-			return { 
-				...state, 
+		case CORRECT_NUMBER_RECEIVED: {
+			return {
+				...state,
 				numbers: [
 					...state.numbers, 
-					{ value: action.number, status: correctNumberStatus.received }
-				] 
+					{ value: action.numberValue, status: correctNumberStatus.received }
+				]
 			};
 		}
 
-		case correctNumberWaiting: {
+		case CORRECT_NUMBER_WAITING: {
 			return {
 				...state,
-				numbers: updateNumberStatus(state.numbers, action.number, correctNumberStatus.waiting)
+				numbers: state.numbers.map(
+					(n) => n.value === action.numberValue ? 
+						({ ...n, status: correctNumberStatus.waiting }) : 
+						n
+				)
 			};
 		}
 
-		case showCorrectNumber: {
+		case 	CORRECT_NUMBER_ANIMATING: {
 			return {
 				...state,
-				numbers: updateNumberStatus(state.numbers, action.number, correctNumberStatus.animating)
+				numbers: state.numbers.map(
+					(n) => n.value === action.numberValue ? 
+						({ ...n, status: correctNumberStatus.animating }) : 
+						n
+				)
 			};
 		}
 
-		case startCorrectingNumber: {
+		case 	CORRECT_NUMBER_CORRECTING: {
 			return {
 				...state,
-				numbers: updateNumberStatus(state.numbers, action.number, correctNumberStatus.correcting)
+				numbers: state.numbers.map(
+					(n) => n.value === action.numberValue ? 
+						({ ...n, status: correctNumberStatus.correcting }) : 
+						n
+				)
 			};
 		}
 
-		case correctNumberCorrected: {
+		case CORRECT_NUMBER_CORRECTED: {
 			return {
 				...state,
-				numbers: updateNumberStatus(state.numbers, action.number, correctNumberStatus.corrected)
+				numbers: state.numbers.map(
+					(n) => n.status === correctNumberStatus.correcting ? 
+						({ ...n, status: correctNumberStatus.corrected }) : 
+						n
+				)
+			};
+		}
+
+		case CORRECTION_READY_TO_START: {
+			return {
+				...state,
+				correctionStatus: correctionStatus.readyToStart
+			};
+		}
+
+		case CORRECTION_STARTING: {
+			return {
+				...state,
+				correctionStatus: correctionStatus.starting
+			};
+		}
+
+		case CORRECTION_STARTED: {
+			return {
+				...state,
+				correctionStatus: correctionStatus.started
 			};
 		}
 

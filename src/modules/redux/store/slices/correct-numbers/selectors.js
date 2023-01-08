@@ -1,24 +1,57 @@
-import { createSelector } from 'reselect';
-import { correctNumberStatus } from '../../../constants';
+import { createSelector } from "reselect";
+import { correctNumberStatus } from "../../../constants";
 
-const selectNumbers = (state) => state.correctNumbers.numbers;
+const arraysAreSameLength = (arr1, arr2) => arr1?.length === arr2?.length;
 
-export const selectCorrectionStarted = (state) => state.correctNumbers.correctionStarted;
+const selectCorrectNumbersSlice = createSelector(
+	(state) => state.correctNumbers,
+	(correctNumbers) => correctNumbers
+);
 
-export const selectNumberToCorrect = (state) => state.correctNumbers.numbers.find((n) => n.status === correctNumberStatus.correcting);
+const selectCorrectNumbers = createSelector(
+	selectCorrectNumbersSlice,
+	(correctNumbers) => correctNumbers.numbers
+);
 
-export const selectVisibleNumbers = createSelector(
-	selectNumbers,
-	(numbers) => numbers.filter((n) => n.status > correctNumberStatus.waiting)
+const selectNumberToCorrect = createSelector(
+	selectCorrectNumbers,
+	(numbers) => numbers.find((n) => n.status > correctNumberStatus.received && n.status < correctNumberStatus.corrected)?.value
+);
+
+export const selectCorrectionStatus = createSelector(
+	selectCorrectNumbersSlice,
+	(correctNumbers) => correctNumbers.correctionStatus
 );
 
 export const selectHiddenNumbers = createSelector(
-	selectNumbers,
-	(numbers) => numbers.filter((n) => n.status < correctNumberStatus.correcting)
+	selectCorrectNumbers,
+	(numbers) => numbers.filter((n) => n.status <= correctNumberStatus.animating),
+	{
+		memoizeOptions: {
+			resultEqualityCheck: arraysAreSameLength
+    }
+	}
 );
 
-export const createSelectCorrectNumberStatus = () => createSelector(
-	selectNumbers,
-	(state, number) => number,
-	(numbers, number) => numbers.find((n) => n.value === number)?.status
+export const selectVisibleNumbers = createSelector(
+	selectCorrectNumbers,
+	(numbers) => numbers.filter((n) => n.status >= correctNumberStatus.animating),
+	{
+		memoizeOptions: {
+			resultEqualityCheck: arraysAreSameLength
+    }
+	}
 );
+
+export const createCorrectNumberStatusSelector = (numberValue) => createSelector(
+	selectCorrectNumbers,
+	(numbers) => numbers.find((n) => n.value === numberValue)?.status
+);
+0
+export const createIsNumberToCorrectSelector = (value) => createSelector(
+	selectNumberToCorrect,
+	(numberToCorrect) => numberToCorrect === value
+);
+
+
+
