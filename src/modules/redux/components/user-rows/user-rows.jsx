@@ -7,10 +7,8 @@ import { selectIsCorrectionOfNumberComplete, selectUserRowIds, selectPresortedUs
 import { UserRow } from './user-row/user-row';
 
 export const UserRows = () => {
-
 const sortedRows = useSelector(selectPresortedUserRowIds);
 const isCorrectionOfNumberComplete = useSelector(selectIsCorrectionOfNumberComplete);
-
 
 const dispatch = useDispatch();
 const ref = useRef();

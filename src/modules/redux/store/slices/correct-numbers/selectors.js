@@ -47,7 +47,7 @@ export const createCorrectNumberStatusSelector = (numberValue) => createSelector
 	selectCorrectNumbers,
 	(numbers) => numbers.find((n) => n.value === numberValue)?.status
 );
-0
+
 export const createIsNumberToCorrectSelector = (value) => createSelector(
 	selectNumberToCorrect,
 	(numberToCorrect) => numberToCorrect === value
