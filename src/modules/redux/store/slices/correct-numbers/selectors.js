@@ -43,6 +43,12 @@ export const selectVisibleNumbers = createSelector(
 	}
 );
 
+export const selectIsAllNumbersCorrected = createSelector(
+	selectHiddenNumbers,
+	selectCorrectNumbers,
+	(hiddenNumbers, correctNumbers) => hiddenNumbers.length === 0 && !correctNumbers.some((n) => n.status < correctNumberStatus.corrected)
+);
+
 export const createCorrectNumberStatusSelector = (numberValue) => createSelector(
 	selectCorrectNumbers,
 	(numbers) => numbers.find((n) => n.value === numberValue)?.status

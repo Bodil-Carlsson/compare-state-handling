@@ -10,7 +10,9 @@ import {
 	CORRECT_NUMBER_CORRECTED,
 	CORRECTION_READY_TO_START,
 	CORRECTION_STARTING,
-	CORRECTION_STARTED
+	CORRECTION_STARTED,
+	CORRECTION_ALL_NUMBERS_RECEIVED,
+	CORRECTION_COMPLETED
 } from './action-types';
 
 const initialState = {
@@ -93,6 +95,20 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				correctionStatus: correctionStatus.started
+			};
+		}
+
+		case CORRECTION_ALL_NUMBERS_RECEIVED: {
+			return {
+				...state,
+				correctionStatus: correctionStatus.allNumersReceived
+			};
+		}
+
+		case CORRECTION_COMPLETED: {
+			return {
+				...state,
+				correctionStatus: correctionStatus.completed
 			};
 		}
 

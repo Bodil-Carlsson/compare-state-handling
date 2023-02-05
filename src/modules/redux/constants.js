@@ -30,6 +30,7 @@ const initial = 'initial';
 const readyToStart = 'readyToStart';
 const starting = 'starting';
 const started = 'started';
+const allNumersReceived = 'allNumbersReceived';
 const completed = 'completed';
 
 const cs = [
@@ -37,6 +38,7 @@ const cs = [
 	readyToStart,
 	starting,
 	started,
+	allNumersReceived,
 	completed
 ];
 
@@ -45,5 +47,6 @@ export const correctionStatus = {
 	readyToStart: cs.indexOf(readyToStart),
 	starting: cs.indexOf(starting),
 	started: cs.indexOf(started),
+	allNumersReceived: cs.indexOf(allNumersReceived),
 	completed: cs.indexOf(completed)
 };

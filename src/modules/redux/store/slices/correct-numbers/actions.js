@@ -6,7 +6,9 @@ import {
 	CORRECT_NUMBER_CORRECTED,
 	CORRECTION_READY_TO_START,
 	CORRECTION_STARTING,
-	CORRECTION_STARTED
+	CORRECTION_STARTED,
+	CORRECTION_ALL_NUMBERS_RECEIVED,
+	CORRECTION_COMPLETED
 } from './action-types';
 
 export const correctNumberReceived = (numberValue) => ({ type: CORRECT_NUMBER_RECEIVED, numberValue });
@@ -17,6 +19,8 @@ export const correctNumberCorrected = () => ({ type: CORRECT_NUMBER_CORRECTED })
 export const correctionReadyToStart = () => ({ type: CORRECTION_READY_TO_START });
 export const correctionStarting = () => ({ type: CORRECTION_STARTING });
 export const correctionStarted = () => ({ type: CORRECTION_STARTED });
+export const correctionAllNumersReceived = () => ({ type: CORRECTION_ALL_NUMBERS_RECEIVED });
+export const correctionCompleted = () => ({ type: CORRECTION_COMPLETED });
 
 export default {
 	correctNumberReceived,
@@ -26,5 +30,7 @@ export default {
 	correctNumberCorrected,
 	correctionReadyToStart,
 	correctionStarting,
-	correctionStarted
+	correctionStarted,
+	correctionAllNumersReceived,
+	correctionCompleted
 };
